@@ -12,8 +12,7 @@ namespace SpendSmart
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<SpendSmartDbContext>(options =>
-                options.UseInMemoryDatabase("SpendSmartDb")
-                );
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
@@ -21,7 +20,6 @@ namespace SpendSmart
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SpendSmart.Models;
 using System.Diagnostics;
 
@@ -30,7 +30,7 @@ namespace SpendSmart.Controllers
 
         public IActionResult CreateEditExpense(int? id)
         {
-            if(id != null)
+            if (id != null)
             {
                 //editing -> load an expense by id 
                 var expenseInDb = _context.Expenses.SingleOrDefault(x => x.Id == id);
@@ -41,23 +41,30 @@ namespace SpendSmart.Controllers
             return View();
         }
 
-        public IActionResult DeleteExpense(int id )
-
+        public IActionResult DeleteExpense(int id)
         {
             var expenseInDb = _context.Expenses.SingleOrDefault(x => x.Id == id);
+
+            if (expenseInDb == null)
+            {
+                return NotFound(); // Eğer expense bulunamazsa 404 döndür.
+            }
+
             _context.Expenses.Remove(expenseInDb);
             _context.SaveChanges();
             return RedirectToAction("Expenses");
         }
+
 
         public IActionResult CreateEditExpenseForm(Expense model)
         {
             if (model.Id == 0)
             {
                 // create 
-                 _context.Expenses.Add(model);
+                _context.Expenses.Add(model);
 
-            }else
+            }
+            else
             {
                 //editing
                 _context.Expenses.Update(model);
