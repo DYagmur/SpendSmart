@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "All Products";
+}
+
+@model List<SpendSmart.Models.Expense>
+
+<div class="text-center">
+    <h1 class="display-4">All Books</h1>
+
+    <!-- Sort Links -->
+    <div>
+        <a asp-action="Listed" asp-route-sortOrder="value_asc">Sort by Value (Low to High)</a> |
+        <a asp-action="Listed" asp-route-sortOrder="value_desc">Sort by Value (High to Low)</a>
+    </div>
+
+    <div class="row mt-4">
+        @foreach (var expense in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="@expense.ImagePath" alt="Expense Image" style="max-height: 200px; object-fit: cover;" />
+                    <div class="card-body">
+                        <h5 class="card-title">$@expense.Value</h5>
+                        <p class="card-text">@expense.Description</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

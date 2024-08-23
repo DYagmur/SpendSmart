@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SpendSmart.Models
 {
@@ -6,9 +7,10 @@ namespace SpendSmart.Models
     {
         public int Id { get; set; }
         public decimal Value { get; set; }
+        public string Description { get; set; } = string.Empty;
+        public string ImagePath { get; set; } = string.Empty;
 
-        [Required]
-        public string? Description { get; set; }
-
+        [NotMapped]
+        public IFormFile? UploadedImage { get; set; }
     }
 }

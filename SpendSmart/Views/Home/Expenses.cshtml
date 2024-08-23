@@ -2,49 +2,43 @@
     ViewData["Title"] = "Expenses";
 }
 
-@model List<Expense>
+@model List<SpendSmart.Models.Expense>
 
 <div class="text-center">
-    <h1 class="display-4">Expenses</h1>
+    <h1 class="display-4">Books</h1>
     <br />
     <table class="table">
         <thead>
             <tr>
-                <th>
-                    Id
-                </th>
-                <th>
-                    Value
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Actions
-                </th>
+                <th>Id</th>
+                <th>Value</th>
+                <th>Description</th>
+                <th>Image</th> <!-- Yeni sütun -->
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @{
-                foreach (var expense in Model)
-                {
-                    <tr>
-                        <td>
-                            @expense.Id
-                        </td>
-                        <td>
-                            @expense.Value
-                        </td>
-                        <td>
-                            @expense.Description
-                        </td>
-                        <td>
-                            <a asp-action="CreateEditExpense" asp-route-id="@expense.Id">Edit</a>
-                            <a asp-action="DeleteExpense" asp-route-id="@expense.Id">Delete</a>
-                        </td>
-
-                    </tr>
-                }
+            @foreach (var expense in Model)
+            {
+                <tr>
+                    <td>@expense.Id</td>
+                    <td>@expense.Value</td>
+                    <td>@expense.Description</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(expense.ImagePath))
+                        {
+                            <img src="@expense.ImagePath" alt="Expense Image" style="max-width: 100px; max-height: 100px;" />
+                        }
+                        else
+                        {
+                            <span>No Image</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="CreateEditExpense" asp-route-id="@expense.Id">Edit</a>
+                        <a asp-action="DeleteExpense" asp-route-id="@expense.Id">Delete</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
