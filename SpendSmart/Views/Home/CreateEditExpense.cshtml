@@ -5,26 +5,29 @@
 @model SpendSmart.Models.Expense
 
 <div class="text-center">
-    <h1 class="display-4">Create or Edit a Book</h1>
+    <h1 class="display-4">Create or Edit an Expense</h1>
 </div>
 
 <form asp-action="CreateEditExpenseForm" asp-controller="Home" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
 
     <div class="form-group">
-        <label asp-for="Value">Value $</label>
-        <input class="form-control" asp-for="Value" type="number" step="0.01" />
+        <label asp-for="Value" class="control-label"></label>
+        <input asp-for="Value" class="form-control" />
+        <span asp-validation-for="Value" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Description">Description</label>
-        <input class="form-control" asp-for="Description" type="text" placeholder="Add a description" />
+        <label asp-for="Description" class="control-label"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="UploadedImage">Upload Image</label>
-        <input class="form-control" asp-for="UploadedImage" type="file" />
+        <label asp-for="UploadedImage" class="control-label"></label>
+        <input asp-for="UploadedImage" type="file" class="form-control" />
+        <span asp-validation-for="UploadedImage" class="text-danger"></span>
     </div>
 
-    <button class="btn btn-primary mt-4" type="submit">Save</button>
+    <button type="submit" class="btn btn-primary">Save</button>
 </form>

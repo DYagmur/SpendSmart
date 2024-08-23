@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Drawing; // For Bitmap and Image
+using System.Drawing.Imaging; // For ImageFormat
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SpendSmart.Models;
@@ -6,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Drawing.Drawing2D; // For Graphics settings
 
 namespace SpendSmart.Controllers
 {
@@ -28,13 +31,15 @@ namespace SpendSmart.Controllers
         public IActionResult Listed(string sortOrder)
         {
             var expenses = _context.Expenses
-                .AsNoTracking() // Avoid unnecessary change tracking
+                .AsNoTracking()
                 .Select(expense => new Expense
                 {
                     Id = expense.Id,
                     Value = expense.Value,
                     Description = expense.Description ?? string.Empty,
-                    ImagePath = expense.ImagePath ?? string.Empty // Handle null image path
+                    SmallImagePath = expense.SmallImagePath ?? string.Empty,
+                    MediumImagePath = expense.MediumImagePath ?? string.Empty,
+                    LargeImagePath = expense.LargeImagePath ?? string.Empty
                 });
 
             // Sort order
@@ -54,17 +59,18 @@ namespace SpendSmart.Controllers
             return View(expenses.ToList());
         }
 
-
         public IActionResult Expenses()
         {
             var allExpenses = _context.Expenses
-                .AsNoTracking() // Avoid unnecessary change tracking
+                .AsNoTracking()
                 .Select(expense => new Expense
                 {
                     Id = expense.Id,
                     Value = expense.Value,
-                    Description = expense.Description ?? string.Empty, // Handle null description
-                    ImagePath = expense.ImagePath ?? string.Empty // Handle null image path
+                    Description = expense.Description ?? string.Empty,
+                    SmallImagePath = expense.SmallImagePath ?? string.Empty,
+                    MediumImagePath = expense.MediumImagePath ?? string.Empty,
+                    LargeImagePath = expense.LargeImagePath ?? string.Empty
                 })
                 .ToList();
 
@@ -84,12 +90,11 @@ namespace SpendSmart.Controllers
                     return View(expenseInDb);
                 }
 
-                return NotFound(); // Eğer expense bulunamazsa 404 döndür
+                return NotFound();
             }
 
-            return View(new Expense()); // Yeni bir Expense nesnesi oluştur
+            return View(new Expense());
         }
-
 
         [HttpPost]
         public async Task<IActionResult> CreateEditExpenseForm(Expense model)
@@ -98,16 +103,37 @@ namespace SpendSmart.Controllers
             {
                 if (model.UploadedImage != null)
                 {
-                    var fileName = Path.GetFileName(model.UploadedImage.FileName);
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                    var fileName = Path.GetFileNameWithoutExtension(model.UploadedImage.FileName);
+                    var extension = Path.GetExtension(model.UploadedImage.FileName);
 
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    // Define paths for small, medium, and large images
+                    var smallImagePath = Path.Combine("wwwroot/images", fileName + "-small" + extension);
+                    var mediumImagePath = Path.Combine("wwwroot/images", fileName + "-medium" + extension);
+                    var largeImagePath = Path.Combine("wwwroot/images", fileName + "-large" + extension);
+
+                    // Process and save the different image sizes
+                    using (var stream = new FileStream(Path.Combine(Directory.GetCurrentDirectory(), smallImagePath), FileMode.Create))
                     {
-                        await model.UploadedImage.CopyToAsync(stream);
+                        var smallImage = ResizeImage(model.UploadedImage.OpenReadStream(), 100, 100);
+                        smallImage.Save(stream, ImageFormat.Jpeg);
                     }
 
-                    // Save the file path to the database
-                    model.ImagePath = "/images/" + fileName;
+                    using (var stream = new FileStream(Path.Combine(Directory.GetCurrentDirectory(), mediumImagePath), FileMode.Create))
+                    {
+                        var mediumImage = ResizeImage(model.UploadedImage.OpenReadStream(), 500, 500);
+                        mediumImage.Save(stream, ImageFormat.Jpeg);
+                    }
+
+                    using (var stream = new FileStream(Path.Combine(Directory.GetCurrentDirectory(), largeImagePath), FileMode.Create))
+                    {
+                        var largeImage = ResizeImage(model.UploadedImage.OpenReadStream(), 1000, 1000);
+                        largeImage.Save(stream, ImageFormat.Jpeg);
+                    }
+
+                    // Save the file paths to the database
+                    model.SmallImagePath = "/images/" + Path.GetFileName(smallImagePath);
+                    model.MediumImagePath = "/images/" + Path.GetFileName(mediumImagePath);
+                    model.LargeImagePath = "/images/" + Path.GetFileName(largeImagePath);
                 }
 
                 if (model.Id == 0)
@@ -120,17 +146,30 @@ namespace SpendSmart.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Expenses"); // Redirect to Expenses after saving
+                return RedirectToAction("Expenses");
             }
 
-            // If we got this far, something failed, redisplay form
             return View("CreateEditExpense", model);
         }
 
+        private Image ResizeImage(Stream stream, int width, int height)
+        {
+            var image = Image.FromStream(stream);
+            var resized = new Bitmap(width, height);
+
+            using (var graphics = Graphics.FromImage(resized))
+            {
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.DrawImage(image, 0, 0, width, height);
+            }
+
+            return resized;
+        }
 
         public IActionResult DeleteExpense(int id)
         {
-            // Veritabanından id ile eşleşen kaydı getiriyoruz
             var expenseInDb = _context.Expenses.SingleOrDefault(x => x.Id == id);
 
             if (expenseInDb == null)
@@ -138,24 +177,25 @@ namespace SpendSmart.Controllers
                 return NotFound();
             }
 
-            // ImagePath'in null veya boş olup olmadığını kontrol ediyoruz
-            if (!string.IsNullOrEmpty(expenseInDb.ImagePath))
+            // Delete image files if they exist
+            var imagePaths = new[] { expenseInDb.SmallImagePath, expenseInDb.MediumImagePath, expenseInDb.LargeImagePath };
+            foreach (var imagePath in imagePaths)
             {
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", expenseInDb.ImagePath.TrimStart('/'));
-                if (System.IO.File.Exists(filePath))
+                if (!string.IsNullOrEmpty(imagePath))
                 {
-                    System.IO.File.Delete(filePath);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath.TrimStart('/'));
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
                 }
             }
 
-            // Veritabanındaki kaydı siliyoruz
             _context.Expenses.Remove(expenseInDb);
             _context.SaveChanges();
 
             return RedirectToAction("Expenses");
         }
-
-
 
         public IActionResult Privacy()
         {

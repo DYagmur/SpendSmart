@@ -13,7 +13,7 @@
                 <th>Id</th>
                 <th>Value</th>
                 <th>Description</th>
-                <th>Image</th> <!-- Yeni sütun -->
+                <th>Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -25,9 +25,9 @@
                     <td>@expense.Value</td>
                     <td>@expense.Description</td>
                     <td>
-                        @if (!string.IsNullOrEmpty(expense.ImagePath))
+                        @if (!string.IsNullOrEmpty(expense.MediumImagePath))
                         {
-                            <img src="@expense.ImagePath" alt="Expense Image" style="max-width: 100px; max-height: 100px;" />
+                            <img src="@expense.MediumImagePath" alt="Expense Image" style="max-width: 100px; max-height: 100px;" />
                         }
                         else
                         {
@@ -43,3 +43,4 @@
         </tbody>
     </table>
 </div>
+

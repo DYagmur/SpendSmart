@@ -7,7 +7,6 @@
 <div class="text-center">
     <h1 class="display-4">All Books</h1>
 
-    <!-- Sort Links -->
     <div>
         <a asp-action="Listed" asp-route-sortOrder="value_asc">Sort by Value (Low to High)</a> |
         <a asp-action="Listed" asp-route-sortOrder="value_desc">Sort by Value (High to Low)</a>
@@ -18,7 +17,14 @@
         {
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <img class="card-img-top" src="@expense.ImagePath" alt="Expense Image" style="max-height: 200px; object-fit: cover;" />
+                    @if (!string.IsNullOrEmpty(expense.MediumImagePath))
+                    {
+                        <img class="card-img-top" src="@expense.MediumImagePath" alt="Expense Image" style="max-height: 200px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <img class="card-img-top" src="/images/default.png" alt="No Image" style="max-height: 200px; object-fit: cover;" />
+                    }
                     <div class="card-body">
                         <h5 class="card-title">$@expense.Value</h5>
                         <p class="card-text">@expense.Description</p>
@@ -27,4 +33,5 @@
             </div>
         }
     </div>
+</div>
 </div>
