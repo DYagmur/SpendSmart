@@ -9,7 +9,7 @@ namespace SpendSmart
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Add services to the container..
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<SpendSmartDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
