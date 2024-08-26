@@ -9,14 +9,33 @@ namespace SpendSmart
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container..
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<SpendSmartDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            var databaseProvider = builder.Configuration.GetValue<string>("DatabaseProvider");
+
+            if (databaseProvider == "PostgreSQL")
+            {
+                // Register PostgreSqlDbContext
+                builder.Services.AddDbContext<PostgreSqlDbContext>(options =>
+                    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection")));
+
+                // Register ApplicationDbContext<PostgreSqlDbContext> with correct options
+                builder.Services.AddDbContext<ApplicationDbContext<PostgreSqlDbContext>>(options =>
+                    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection")));
+            }
+            else
+            {
+                // Register SqlServerDbContext
+                builder.Services.AddDbContext<SqlServerDbContext>(options =>
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection")));
+
+                // Register ApplicationDbContext<SqlServerDbContext> with correct options
+                builder.Services.AddDbContext<ApplicationDbContext<SqlServerDbContext>>(options =>
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection")));
+            }
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");

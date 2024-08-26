@@ -10,8 +10,8 @@ using SpendSmart.Models;
 
 namespace SpendSmart.Migrations
 {
-    [DbContext(typeof(SpendSmartDbContext))]
-    [Migration("20240822211350_InitialCreate")]
+    [DbContext(typeof(SqlServerDbContext))]
+    [Migration("20240826151506_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -33,6 +33,18 @@ namespace SpendSmart.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LargeImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MediumImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SmallImagePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

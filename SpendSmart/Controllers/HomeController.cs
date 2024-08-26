@@ -1,5 +1,5 @@
-﻿using System.Drawing; // For Bitmap and Image
-using System.Drawing.Imaging; // For ImageFormat
+﻿using System.Drawing;
+using System.Drawing.Imaging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -8,16 +8,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Drawing.Drawing2D; // For Graphics settings
+using System.Drawing.Drawing2D;
 
 namespace SpendSmart.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly SpendSmartDbContext _context;
+        private readonly ApplicationDbContext<PostgreSqlDbContext> _context;
 
-        public HomeController(ILogger<HomeController> logger, SpendSmartDbContext context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext<PostgreSqlDbContext> context)
         {
             _logger = logger;
             _context = context;
@@ -42,7 +42,6 @@ namespace SpendSmart.Controllers
                     LargeImagePath = expense.LargeImagePath ?? string.Empty
                 });
 
-            // Sort order
             switch (sortOrder)
             {
                 case "value_asc":
