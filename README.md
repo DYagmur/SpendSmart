@@ -2,11 +2,11 @@
 
 ## Overview
 
-SpendSmart is a project that allows users to manage expenses. It supports multiple database providers, including SQL Server and PostgreSQL. The application allows users to create, view, update, and delete expenses. Images associated with expenses are resized and stored in different resolutions.
+SpendSmart is a project that allows users to Book store. It supports multiple database providers, including SQL Server and PostgreSQL. The application allows users to create, view, update, and delete expenses. Images associated with expenses are resized and stored in different resolutions.
 
 ## Features
 
-- Manage expenses with details like value, description, and images.
+- Manage books  with details like value, description, and images.
 - Support for both SQL Server and PostgreSQL databases.
 - Dynamic image resizing for better performance and storage optimization.
 
