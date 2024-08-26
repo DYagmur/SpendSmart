@@ -4,7 +4,7 @@ namespace SpendSmart.Models
 {
     public class ApplicationDbContext<TContext> : DbContext where TContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext<TContext>> options)
+        public ApplicationDbContext(DbContextOptions<TContext> options)
             : base(options)
         {
         }

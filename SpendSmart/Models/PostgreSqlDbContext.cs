@@ -4,7 +4,7 @@ namespace SpendSmart.Models
 {
     public class PostgreSqlDbContext : ApplicationDbContext<PostgreSqlDbContext>
     {
-        public PostgreSqlDbContext(DbContextOptions<ApplicationDbContext<PostgreSqlDbContext>> options)
+        public PostgreSqlDbContext(DbContextOptions<PostgreSqlDbContext> options)
             : base(options)
         {
         }

@@ -15,7 +15,7 @@ namespace SpendSmart.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext<PostgreSqlDbContext> _context;
+        private readonly ApplicationDbContext<PostgreSqlDbContext> _context;  // veya PostgreSqlDbContext
 
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext<PostgreSqlDbContext> context)
         {
