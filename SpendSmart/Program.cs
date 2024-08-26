@@ -15,23 +15,31 @@ namespace SpendSmart
 
             if (databaseProvider == "PostgreSQL")
             {
-                // Register PostgreSqlDbContext
-                builder.Services.AddDbContext<PostgreSqlDbContext>(options =>
-                    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection")));
+                // Create DbContextOptions for PostgreSqlDbContext
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext<PostgreSqlDbContext>>();
+                optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection"));
 
-                // Register ApplicationDbContext<PostgreSqlDbContext> with correct options
-                builder.Services.AddDbContext<ApplicationDbContext<PostgreSqlDbContext>>(options =>
-                    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection")));
+                // Register ApplicationDbContext<PostgreSqlDbContext>
+                builder.Services.AddScoped(sp =>
+                    new ApplicationDbContext<PostgreSqlDbContext>(optionsBuilder.Options));
+
+                // Register PostgreSqlDbContext
+                builder.Services.AddScoped(sp =>
+                    new PostgreSqlDbContext(sp.GetRequiredService<DbContextOptions<ApplicationDbContext<PostgreSqlDbContext>>>()));
             }
             else
             {
-                // Register SqlServerDbContext
-                builder.Services.AddDbContext<SqlServerDbContext>(options =>
-                    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection")));
+                // Create DbContextOptions for SqlServerDbContext
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext<SqlServerDbContext>>();
+                optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection"));
 
-                // Register ApplicationDbContext<SqlServerDbContext> with correct options
-                builder.Services.AddDbContext<ApplicationDbContext<SqlServerDbContext>>(options =>
-                    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection")));
+                // Register ApplicationDbContext<SqlServerDbContext>
+                builder.Services.AddScoped(sp =>
+                    new ApplicationDbContext<SqlServerDbContext>(optionsBuilder.Options));
+
+                // Register SqlServerDbContext
+                builder.Services.AddScoped(sp =>
+                    new SqlServerDbContext(sp.GetRequiredService<DbContextOptions<ApplicationDbContext<SqlServerDbContext>>>()));
             }
 
             var app = builder.Build();
