@@ -85,4 +85,9 @@ Hangfire
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-Configuration
+## Configuration
+
+Update the appsettings.json file with the connection strings and database provider.
+
+Configure the application as needed to use SQL Server or PostgreSQL.
+
