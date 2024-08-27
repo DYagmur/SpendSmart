@@ -20,18 +20,31 @@ NuGet Packages
 Add the following NuGet packages to your project:
 
 System.Drawing.Common (8.0.8)
+
 Hangfire (1.8.14)
+
 Microsoft.EntityFrameworkCore (8.0.8)
+
 Microsoft.EntityFrameworkCore.SqlServer (8.0.8)
+
 Microsoft.EntityFrameworkCore.Design (8.0.8)
+
 Hangfire.SqlServer (1.8.14)
+
 Hangfire.AspNetCore (1.8.14)
+
 Hangfire.Core (1.8.14)
+
 Hangfire.NetCore (1.8.14)
+
 Npgsql.EntityFrameworkCore.PostgreSQL (8.0.4)
+
 Microsoft.EntityFrameworkCore.InMemory (8.0.8)
+
 Npgsql (8.0.3)
+
 Hangfire.PostgreSql (1.20.9)
+
 
 ## Dependencies
 Ensure the following dependencies are installed and properly configured for the application to function correctly:
