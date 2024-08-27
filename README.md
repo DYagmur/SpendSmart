@@ -53,12 +53,25 @@ Npgsql (8.0.3)
 
 Hangfire.PostgreSql (1.20.9)
 
-SDK Packs
-Ensure the following .NET SDK packs are installed:
+## .NET SDK
 
-Microsoft.AspNetCore.App.Ref 8.0.5: Located at C:\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\8.0.5\
+Ensure you have the .NET SDK 8.0 installed. If not, you can download it from the official .NET download page.
 
-Microsoft.NETCore.App.Ref 8.0.5: Located at C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.5\
+## Download SQL Server
+
+Go to the SQL Server Downloads page.
+
+Choose the edition that suits your needs (e.g., Developer, Express).
+
+Download the installer and follow the installation steps.
+
+## Download PostgreSQL
+
+Go to the PostgreSQL Downloads page.
+
+Choose your operating system and download the appropriate installer.
+
+Follow the installation instructions.
 
 
 
