@@ -9,7 +9,6 @@ namespace SpendSmart.Models
         public decimal Value { get; set; }
         public string Description { get; set; } = string.Empty;
 
-        // New properties for image paths
         public string SmallImagePath { get; set; } = string.Empty;
         public string MediumImagePath { get; set; } = string.Empty;
         public string LargeImagePath { get; set; } = string.Empty;

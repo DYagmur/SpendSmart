@@ -1,36 +1,36 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using SpendSmart.Models;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Drawing.Drawing2D;
 
 namespace SpendSmart.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext<PostgreSqlDbContext> _context;  // veya PostgreSqlDbContext
+        private readonly SqlServerDbContext _sqlServerDbContext;
+        private readonly PostgreSqlDbContext _postgreSqlDbContext;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext<PostgreSqlDbContext> context)
+        public HomeController(SqlServerDbContext sqlServerDbContext, PostgreSqlDbContext postgreSqlDbContext)
         {
-            _logger = logger;
-            _context = context;
+            _sqlServerDbContext = sqlServerDbContext;
+            _postgreSqlDbContext = postgreSqlDbContext;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var expenses = await _sqlServerDbContext.Expenses.ToListAsync();
+            return View(expenses);
         }
 
         public IActionResult Listed(string sortOrder)
         {
-            var expenses = _context.Expenses
+            var expenses = _sqlServerDbContext.Expenses
                 .AsNoTracking()
                 .Select(expense => new Expense
                 {
@@ -60,7 +60,7 @@ namespace SpendSmart.Controllers
 
         public IActionResult Expenses()
         {
-            var allExpenses = _context.Expenses
+            var allExpenses = _sqlServerDbContext.Expenses
                 .AsNoTracking()
                 .Select(expense => new Expense
                 {
@@ -80,7 +80,7 @@ namespace SpendSmart.Controllers
         {
             if (id.HasValue)
             {
-                var expenseInDb = _context.Expenses
+                var expenseInDb = _sqlServerDbContext.Expenses
                     .AsNoTracking()
                     .FirstOrDefault(x => x.Id == id);
 
@@ -137,14 +137,14 @@ namespace SpendSmart.Controllers
 
                 if (model.Id == 0)
                 {
-                    _context.Expenses.Add(model);
+                    _sqlServerDbContext.Expenses.Add(model);
                 }
                 else
                 {
-                    _context.Expenses.Update(model);
+                    _sqlServerDbContext.Expenses.Update(model);
                 }
 
-                await _context.SaveChangesAsync();
+                await _sqlServerDbContext.SaveChangesAsync();
                 return RedirectToAction("Expenses");
             }
 
@@ -169,7 +169,7 @@ namespace SpendSmart.Controllers
 
         public IActionResult DeleteExpense(int id)
         {
-            var expenseInDb = _context.Expenses.SingleOrDefault(x => x.Id == id);
+            var expenseInDb = _sqlServerDbContext.Expenses.SingleOrDefault(x => x.Id == id);
 
             if (expenseInDb == null)
             {
@@ -190,8 +190,8 @@ namespace SpendSmart.Controllers
                 }
             }
 
-            _context.Expenses.Remove(expenseInDb);
-            _context.SaveChanges();
+            _sqlServerDbContext.Expenses.Remove(expenseInDb);
+            _sqlServerDbContext.SaveChanges();
 
             return RedirectToAction("Expenses");
         }
