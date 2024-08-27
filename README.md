@@ -1,49 +1,46 @@
-# SpendSmart
-
-## Overview
-
-SpendSmart is a project that allows users to Book store. It supports multiple database providers, including SQL Server and PostgreSQL. The application allows users to create, view, update, and delete expenses. Images associated with expenses are resized and stored in different resolutions.
+## SpendSmart
+Overview
+SpendSmart is an application designed for managing a book store. It supports multiple database providers, including SQL Server and PostgreSQL, and enables users to create, view, update, and delete expenses. The application also handles image resizing for optimized storage and performance. Data synchronization between different databases is facilitated using Hangfire for background task management.
 
 ## Features
-
-- Manage books  with details like value, description, and images.
-- Support for both SQL Server and PostgreSQL databases.
-- Dynamic image resizing for better performance and storage optimization.
+Book Management: Add, view, update, and delete book expenses with details such as value, description, and images.
+Database Support: Seamless integration with both SQL Server and PostgreSQL.
+Image Resizing: Automatically resize images to different resolutions for better performance and storage efficiency.
+Data Synchronization: Regular synchronization of data between SQL Server and PostgreSQL.
 
 ## Technologies
-
-- **ASP.NET Core**: A cross-platform framework for building modern, cloud-based, internet-connected applications.
-- **Entity Framework Core**: An Object-Relational Mapper (ORM) for .NET applications.
-- **SQL Server**: A relational database management system developed by Microsoft.
-- **PostgreSQL**: An open-source relational database management system.
-
-## Packages
-
-- `system.drawing.common` version 8.0.8
-- `microsoft.entityframeworkcore` version 8.0.8
-- `microsoft.entityframeworkcore.sqlserver` version 8.0.8
-- `microsoft.entityframeworkcore.design` version 8.0.8
-- `microsoft.net.http.headers` version 8.0.8
-- `npgsql.entityframeworkcore.postgresql` version 8.0.4
-- `microsoft.entityframeworkcore.inmemory` version 8.0.8
-- `npgsql` version 8.0.3
-
-## Frameworks
-
-- `Microsoft.AspNetCore.App.Ref` version 8.0.5
-- `Microsoft.NETCore.App.Ref` version 8.0.5
-
-## Setup
-## Install Dependencies:
-
-Ensure you have the .NET SDK installed.
-Run the following command to restore the NuGet packages:
-
-dotnet restore
-
-## Configure the Database:
-
-Update the appsettings.json file with your database connection strings and the desired DatabaseProvider.
+ASP.NET Core: Framework for building modern, cloud-based applications.
+Entity Framework Core: ORM for .NET applications, used for data access and management.
+SQL Server: Relational database management system by Microsoft.
+PostgreSQL: Open-source relational database management system.
 
 
+## Installation
+NuGet Packages
+Add the following NuGet packages to your project:
 
+System.Drawing.Common (8.0.8)
+Hangfire (1.8.14)
+Microsoft.EntityFrameworkCore (8.0.8)
+Microsoft.EntityFrameworkCore.SqlServer (8.0.8)
+Microsoft.EntityFrameworkCore.Design (8.0.8)
+Hangfire.SqlServer (1.8.14)
+Hangfire.AspNetCore (1.8.14)
+Hangfire.Core (1.8.14)
+Hangfire.NetCore (1.8.14)
+Npgsql.EntityFrameworkCore.PostgreSQL (8.0.4)
+Microsoft.EntityFrameworkCore.InMemory (8.0.8)
+Npgsql (8.0.3)
+Hangfire.PostgreSql (1.20.9)
+
+## Dependencies
+Ensure the following dependencies are installed and properly configured for the application to function correctly:
+
+.NET 8.0
+Entity Framework Core
+Hangfire
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+Configuration
