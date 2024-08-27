@@ -9,11 +9,19 @@ Image Resizing: Automatically resize images to different resolutions for better 
 Data Synchronization: Regular synchronization of data between SQL Server and PostgreSQL.
 
 ## Technologies
-ASP.NET Core: Framework for building modern, cloud-based applications.
-Entity Framework Core: ORM for .NET applications, used for data access and management.
-SQL Server: Relational database management system by Microsoft.
-PostgreSQL: Open-source relational database management system.
+ASP.NET Core 8.0: A cross-platform framework for building modern, cloud-based, internet-connected applications.
 
+Entity Framework Core 8.0.8: An Object-Relational Mapper (ORM) for .NET applications.
+
+SQL Server: A relational database management system developed by Microsoft.
+
+PostgreSQL: An open-source relational database management system.
+
+Hangfire 1.8.14: Used for scheduling and managing background tasks.
+
+Npgsql 8.0.3: PostgreSQL database provider for Entity Framework Core.
+
+System.Drawing.Common 8.0.8: Used for image processing.
 
 ## Installation
 NuGet Packages
@@ -44,6 +52,14 @@ Microsoft.EntityFrameworkCore.InMemory (8.0.8)
 Npgsql (8.0.3)
 
 Hangfire.PostgreSql (1.20.9)
+
+SDK Packs
+Ensure the following .NET SDK packs are installed:
+
+Microsoft.AspNetCore.App.Ref 8.0.5: Located at C:\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\8.0.5\
+
+Microsoft.NETCore.App.Ref 8.0.5: Located at C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.5\
+
 
 
 ## Dependencies
